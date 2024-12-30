@@ -1,0 +1,50 @@
+---
+title: "REDCapQC"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{REDCapQC_Vig}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(REDCapQC)
+```
+
+The function REDCapQC requires two inputs:
+
+  (1) directory with both the REDCap data dictionary and REDCap data export
+
+  (2) dataset name after saving the dataset as an R dataset
+
+Assumptions for inputs:
+
+  * The program will require the CSV data dictionary from REDCap with the name unchanged
+  * An all data export from REDCap that has been saved
+  * Example: save(myData, file=“/myData.Rdata”)
+  * All files are in the specified working directory
+  * Only required fields will undergo QC
+  * All dates fields will be given in one format
+  * Equal signs will have spaces on both sides, and operators with 2 characters will not have a space between those 2 characters
+  * There are no repeating instruments
+  * Only the function datediff() has been used in branching logic
+  * The function will output a data frame with a list of queries based on the Data Dictionary.
+  
+  
+```{r run}
+# Run script
+dir = "/Users/goings/Documents/Classes/B581 Biostatistics Computing/Final Project"
+setwd(dir)
+querylist <- REDCapQC(getwd(), "MIND_20231105.Rda")
+
+# Summary of queries generated
+table(querylist$var, querylist$txt)
+head(querylist)
+```
